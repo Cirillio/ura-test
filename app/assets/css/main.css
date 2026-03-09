@@ -1,0 +1,47 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+
+@theme static {
+  --font-sans: 'Nunito', sans-serif;
+  --font-mono: 'Rubik', 'sans-serif'
+}
+
+@layer base {
+   body {
+    font-family: "Nunito", sans-serif;
+    font-feature-settings: "ss01", "ss02", "cv01", "cv02";
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  .font-display {
+    @apply tracking-tight;
+    font-family: "Nunito", sans-serif;
+  }
+}
+
+
+:root {
+
+  /* Primary and Secondary */
+  --ui-primary: #FE7D30;
+  --ui-secondary: #35AB6E;
+
+  /* Text default */
+  --ui-text: #4D4845;
+  /* Background Default */
+  --ui-bg: #FBF9F7;
+
+  --ui-radius: 1.25rem;
+
+
+  /* header height */
+  --header-height: 70px;
+}
