@@ -7,10 +7,22 @@ export default defineAppConfig({
     button: {
       slots: {
         base: 'cursor-pointer'
-      }
+      },
+      compoundVariants: [
+        {
+          color: 'primary',
+          variant: 'solid',
+          class: 'text-white'
+        },
+        {
+          color: 'secondary',
+          variant: 'solid',
+          class: 'text-white'
+        }
+      ]
     },
     container: {
-      base: 'max-w-[98rem]'
+      base: 'max-w-[76rem]'
     }
   }
 })

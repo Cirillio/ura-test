@@ -27,6 +27,12 @@
   }
 }
 
+@layer utilities {
+  .h-with-header {
+    @apply h-[calc(100dvh-var(--header-height-full))];
+  }
+}
+
 
 :root {
 
@@ -43,5 +49,6 @@
 
 
   /* header height */
-  --header-height: 70px;
+  --header-height-full: 88px;
+  --header-height: 56px;
 }
