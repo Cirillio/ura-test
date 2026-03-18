@@ -4,6 +4,16 @@ export default defineAppConfig({
       primary: 'green',
       neutral: 'slate'
     },
+    input: {
+      slots: {
+        root: ''
+      }
+    },
+    popover: {
+      slots: {
+        content: 'ring-0 shadow-sm'
+      }
+    },
     button: {
       slots: {
         base: 'cursor-pointer'
@@ -22,7 +32,7 @@ export default defineAppConfig({
       ]
     },
     container: {
-      base: 'max-w-[76rem]'
+      base: 'max-w-[88rem]'
     }
   }
 })

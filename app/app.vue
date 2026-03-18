@@ -6,9 +6,7 @@
   <UApp>
     <AppHeader />
     <UMain>
-      <UContainer class="pt-(--header-height-full)">
-        <NuxtPage />
-      </UContainer>
+      <NuxtPage />
     </UMain>
   </UApp>
 </template>

@@ -31,6 +31,10 @@
   .h-with-header {
     @apply h-[calc(100dvh-var(--header-height-full))];
   }
+
+  .page-container {
+    @apply max-w-[100rem]
+  }
 }
 
 
@@ -45,10 +49,33 @@
   /* Background Default */
   --ui-bg: #FBF9F7;
 
-  --ui-radius: 1.25rem;
+  --ui-radius: 1rem;
 
 
   /* header height */
-  --header-height-full: 88px;
-  --header-height: 56px;
+  /* --header-height-full: 88px; */
+  --header-height: 72px;
+}
+
+.floating-element {
+  animation: float 6s ease-in-out infinite;
+  transform-origin: center center;
+}
+
+.floating-element-delayed {
+  animation: float 5s ease-in-out infinite;
+  animation-delay: 1s;
+  transform-origin: center center;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px) translateX(var(--tw-translate-x, 0));
+  }
+  50% {
+    transform: translateY(-16px) translateX(var(--tw-translate-x, 0));
+  }
+  100% {
+    transform: translateY(0px) translateX(var(--tw-translate-x, 0));
+  }
 }
