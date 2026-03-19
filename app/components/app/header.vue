@@ -1,28 +1,33 @@
 <script lang="ts" setup>
 import type { NavigationMenuItem } from '@nuxt/ui'
+import { useWindowScroll } from '@vueuse/core'
 
-const scrolled = ref(false)
+// ЗАКОН: Нет "магическим числам".
+// Устанавливаем порог скролла. Значение больше 0 предотвращает
+// ложные срабатывания (микро-дребезг) при касании на мобильных устройствах (iOS bounce effect).
+const SCROLL_THRESHOLD: number = 10
 
-const handleScroll = () => {
-  scrolled.value = window.scrollY > 0
-}
+// VueUse безопасно возвращает 0 при SSR-рендеринге, обращение к window не вызовет ошибку 500.
+const { y } = useWindowScroll()
+
+// ЗАКОН: Изоляция бизнес-логики и типизация.
+// Вычисляемое свойство выступает единым источником истины для UI.
+const isScrolled = computed<boolean>(() => y.value > SCROLL_THRESHOLD)
+
+const isMounted = ref(false)
 
 onMounted(() => {
-  window.addEventListener('scroll', handleScroll, { passive: true })
-})
-
-onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll)
+  isMounted.value = true
 })
 
 const MAIN_ROUTES: NavigationMenuItem[] = [
   {
-    label: 'О нас',
-    to: '/about'
-  },
-  {
     label: 'Кружки',
     to: '/clubs'
+  },
+  {
+    label: 'О нас',
+    to: '/about'
   },
   {
     label: 'Галерея',
@@ -34,8 +39,9 @@ const MAIN_ROUTES: NavigationMenuItem[] = [
 
 <template>
   <header
-    class="fixed z-99 top-0 left-0 right-0 flex justify-center transition-all duration-150"
-    :class="scrolled ? 'bg-white/75 backdrop-blur-sm' : 'bg-transparent'"
+    class="fixed z-99 top-0 left-0 right-0 flex  justify-center transition-all duration-300"
+    :class="{ 'bg-white/75 backdrop-blur-sm': isScrolled && isMounted,
+              'bg-white': !isMounted }"
   >
     <UContainer class="flex relative w-full items-center p-2 justify-between h-(--header-height)">
       <!-- LOGO -->
@@ -89,6 +95,16 @@ const MAIN_ROUTES: NavigationMenuItem[] = [
         <UButton
           label="Записаться"
           trailing-icon="ph:rocket-launch-duotone"
+          class="text-base h-full font-semibold py-2 px-4"
+          :ui="{
+            trailingIcon: 'size-5'
+          }"
+        />
+
+        <UButton
+          label="Оформить абонемент"
+          color="secondary"
+          trailing-icon="ph:pencil-duotone"
           class="text-base h-full font-semibold py-2 px-4"
           :ui="{
             trailingIcon: 'size-5'

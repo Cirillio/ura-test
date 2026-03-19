@@ -19,10 +19,21 @@ export default defineNuxtConfig({
   },
 
   routeRules: {
-    '/': { ssr: true }
+    '/': { ssr: true },
+    '/**': {
+      headers: {
+        'Content-Security-Policy': 'frame-src \'self\' https://vk.com https://vkvideo.ru'
+      }
+    }
   },
 
   compatibilityDate: '2025-01-15',
+
+  vite: {
+    server: {
+      allowedHosts: true
+    }
+  },
 
   eslint: {
     config: {

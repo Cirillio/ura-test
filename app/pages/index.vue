@@ -40,6 +40,23 @@ const clubs: ClubShort[] = [
 ]
 
 const carousel = useTemplateRef('carousel')
+const carouselIndex = ref(0)
+
+function goPrev() {
+  if (carouselIndex.value === 0) {
+    carousel.value?.emblaApi?.scrollTo(clubs.length - 1)
+    return
+  }
+  carousel.value?.emblaApi?.scrollPrev()
+}
+
+function goNext() {
+  if (carouselIndex.value === clubs.length - 1) {
+    carousel.value?.emblaApi?.scrollTo(0)
+    return
+  }
+  carousel.value?.emblaApi?.scrollNext()
+}
 
 const CENTER_STATS: {
   icon: string
@@ -148,16 +165,29 @@ const handleSelectContactTimeOption = (option: ContactTimeOption) => {
           </div>
 
           <!-- CTAs -->
-          <UButton
-            size="xl"
-            class="px-5 py-2.5 w-fit group"
-          >
-            <span class="text-xl font-bold">Записаться</span>
-            <UIcon
-              name="ph:rocket-launch-duotone"
-              class="size-6 transition group-hover:translate-x-1.5 group-hover:rotate-5 group-hover:scale-110"
-            />
-          </UButton>
+          <div class="flex gap-4 items-center">
+            <UButton
+              size="xl"
+              class="px-5 py-2.5 w-fit group"
+            >
+              <span class="text-xl font-bold">Записаться</span>
+              <UIcon
+                name="ph:rocket-launch-duotone"
+                class="size-6 transition group-hover:translate-x-1.5 group-hover:rotate-5 group-hover:scale-110"
+              />
+            </UButton>
+            <UButton
+              size="lg"
+              color="secondary"
+              class="px-4 py-2 w-fit group"
+            >
+              <span class="text-lg font-bold">Оформить абонемент</span>
+              <UIcon
+                name="ph:pencil-duotone"
+                class="size-5.5 transition group-hover:translate-x-1.5 group-hover:rotate-5 group-hover:scale-110"
+              />
+            </UButton>
+          </div>
 
           <div class="flex flex-col gap-1">
             <span class="text-default/75 ml-4 text-lg font-bold">Или закажите звонок!</span>
@@ -268,91 +298,147 @@ const handleSelectContactTimeOption = (option: ContactTimeOption) => {
       </UContainer>
     </section>
 
+    <!-- Short About Us Section -->
+    <section class="bg-white flex overflow-hidden w-full relative py-20 z-10">
+      <UIcon
+        name="ph:puzzle-piece-duotone"
+        class="absolute rotate-45 -bottom-72 -left-72 z-0 opacity-10 size-240 text-primary"
+      />
+
+      <UContainer class="relative z-10 grid grid-cols-1 md:grid-cols-2 items-center gap-12 md:gap-16">
+        <!-- Left: text content -->
+        <div class="flex h-full flex-col gap-6">
+          <span
+            class="w-fit flex  items-center mb-carouselIndexauto font-semibold"
+          >
+            <UIcon
+              name="ph:dot-duotone"
+              class="size-5 mr-1 mb-0.5 text-primary animate-pulse"
+            />
+            <span class="text-default">О нашем центре</span>
+
+          </span>
+
+          <h2 class="font-extrabold leading-[0.9] text-secondary text-4xl lg:text-5xl xl:text-6xl">
+            Место, где каждый<br>
+            ребёнок <span class="text-primary">раскрывается</span>
+          </h2>
+
+          <p class="text-default/65 font-semibold text-lg leading-relaxed max-w-md">
+            «Улица Радости» — это центр умного развития для детей, где уютная атмосфера,
+            внимательные педагоги и интересные занятия помогают каждому ребёнку найти
+            своё призвание и поверить в себя.
+          </p>
+
+          <UButton
+            to="/about"
+            size="xl"
+            class="px-5 py-2.5 mt-auto w-fit group"
+          >
+            <span class="text-lg font-bold">Узнать больше</span>
+            <UIcon
+              name="ph:arrow-right-bold"
+              class="size-5 transition group-hover:translate-x-1"
+            />
+          </UButton>
+        </div>
+
+        <!-- Right: VK embed video -->
+        <div class="aspect-square rounded-lg flex ring-2 ring-transparent transition hover:ring-primary overflow-hidden w-full">
+          <iframe
+            src="https://vkvideo.ru/video_ext.php?oid=-182596799&id=456239953&hash=83002f9ccf49043e&hd=2"
+            allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;"
+            frameborder="0"
+            allowfullscreen
+            class="h-full w-full object-cover"
+          />
+        </div>
+      </UContainer>
+    </section>
+
     <!-- Popular Clubs Section -->
-    <section class=" flex flex-col z-10 items-center bg-white pb-4">
-      <UContainer class=" flex w-full flex-col gap-4">
-        <!-- <div class="flex items-center justify-between">
-          <div class="">
-            <h2 class="text-6xl font-bold text-primary">
-              Популярные направления
-            </h2>
-            <p class=" font-semibold text-xl">
-              Самые любимые кружки наших учеников. Выбирайте то, что по душе вашему ребенку.
-            </p>
-          </div>
+    <section class="bg-default flex w-full relative overflow-hidden py-20 z-10">
+      <UIcon
+        name="ph:cookie-duotone"
+        class="absolute rotate-15 -bottom-72 -left-72 z-0 opacity-10 size-240 text-primary"
+      />
 
-          <div class="flex gap-4">
+      <UContainer class="relative z-10 grid grid-cols-1 md:grid-cols-2 items-center gap-12 md:gap-16">
+        <!-- Left: text content -->
+        <div class="flex h-full flex-col gap-6">
+          <span class="w-fit flex items-center font-semibold">
+            <UIcon
+              name="ph:dot-duotone"
+              class="size-5 mr-1 mb-0.5 text-primary animate-pulse"
+            />
+            <span class="text-default">Для вашего ребёнка</span>
+          </span>
+
+          <h2 class="font-extrabold leading-[0.9] text-secondary text-4xl lg:text-5xl xl:text-6xl">
+            Популярные<br>
+            <span class="text-primary">направления</span>
+          </h2>
+
+          <p class="text-default/65 font-semibold text-lg leading-relaxed max-w-md">
+            Самые любимые кружки наших учеников. Выбирайте то, что по душе вашему ребёнку —
+            мы найдём занятие для каждого характера и таланта.
+          </p>
+
+          <div class="flex mt-auto items-center justify-between">
             <UButton
-              variant="soft"
-              color="secondary"
-              class="aspect-square rounded-full"
-              @click="goPrev"
+              to="/clubs"
+              size="xl"
+              class="px-5 py-2.5  w-fit group"
             >
+              <span class="text-lg font-bold">Все кружки</span>
               <UIcon
-                name="ph:arrow-left"
-                class="size-6"
+                name="ph:arrow-right-bold"
+                class="size-5 transition group-hover:translate-x-1"
               />
             </UButton>
 
-            <UButton
-              variant="soft"
-              color="secondary"
-              class="aspect-square rounded-full"
-              @click="goNext"
-            >
-              <UIcon
-                name="ph:arrow-right"
-                class="size-6"
+            <div class="flex gap-2 items-center">
+              <UButton
+                class="aspect-square justify-center"
+                icon="ph:arrow-left"
+                color="secondary"
+                size="lg"
+                @click="goPrev"
               />
-            </UButton>
+              <UButton
+                class="aspect-square justify-center"
+                icon="ph:arrow-right"
+                color="secondary"
+                size="lg"
+                @click="goNext"
+              />
+            </div>
           </div>
-        </div> -->
+        </div>
 
-        <UPageCTA
-          :variant="'naked'"
-        >
-          <template #title>
-            <h2 class="text-6xl font-bold text-primary">
-              Популярные направления
-            </h2>
-          </template>
-
-          <template #description>
-            <p class=" font-semibold text-2xl">
-              Самые любимые кружки наших учеников. Выбирайте то, что по душе вашему ребенку.
-            </p>
-          </template>
-        </UPageCTA>
-        <div class="rounded-lg py-4 bg-default">
+        <!-- Right: carousel -->
+        <div class="rounded-lg ring-2 ring-transparent transition hover:ring-primary bg-white w-full">
           <UCarousel
             v-slot="{ item: club }"
             ref="carousel"
             :items="clubs"
-            :autoplay="{ delay: 30000 }"
+            :autoplay="{ delay: 5000 }"
             :watch-drag="true"
             :aling="'start'"
-            class="px-6"
             :ui="{
-              container: '-ms-6',
-              item: 'ps-6 basis-[40%]'
+              container: 'ms-0 [&>*]:pl-6 [&>*:last-child]:px-6 py-4',
+              item: 'ps-0 basis-[60%]'
             }"
+            class="focus-visible:ring-primary ring-2 ring-transparent transition overflow-hidden rounded-lg"
+            @select="(i:number) => (carouselIndex = i)"
           >
             <HomeTopClubCard
               v-bind="club"
-              class="h-120 my-2 ml-6"
+              class="h-120 my-2 "
             />
           </UCarousel>
         </div>
       </UContainer>
-
-      <!-- <div class="grid grid-cols-4 gap-4">
-        <HomeTopClubCard
-          v-for="club in clubs"
-          :key="club.title"
-          v-bind="club"
-          class="h-76"
-        />
-      </div> -->
     </section>
   </div>
 </template>
