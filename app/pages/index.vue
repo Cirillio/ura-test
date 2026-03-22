@@ -1,6 +1,41 @@
 <script lang="ts" setup>
 import type { ClubShort } from '~/components/home/TopClubCard.vue'
-import { vMaska } from 'maska/vue'
+
+const galleryImages: { src: string, alt: string }[] = [
+  { src: 'club_1.jpg', alt: 'Настольные игры' },
+  { src: 'event-1.jpeg', alt: 'Театральные игры' },
+  { src: 'club_2.jpg', alt: 'Рисование' },
+  { src: 'event-4.jpg', alt: 'Космическая лекция' }
+]
+
+// --- FAQ ---
+const faqItems = [
+  {
+    label: 'С какого возраста можно записаться?',
+    icon: 'ph:baby',
+    content: 'Мы принимаем детей от 2 лет. Для самых маленьких есть специальные развивающие и сенсорные занятия с педагогом, а для ребят постарше — кружки, продлёнка и каникулярные программы.'
+  },
+  {
+    label: 'Как записаться на пробное занятие?',
+    icon: 'ph:pencil-simple',
+    content: 'Оставьте заявку через форму на сайте или закажите обратный звонок — мы свяжемся с вами и подберём удобное время. Пробное занятие стоит 1 200 ₽.'
+  },
+  {
+    label: 'Есть ли абонементы и скидки?',
+    icon: 'ph:ticket',
+    content: 'Да! Мы предлагаем абонементы на 4 и 8 занятий со скидкой до 20%. Для многодетных семей и при записи на несколько направлений — дополнительные скидки.'
+  },
+  {
+    label: 'Какие направления у вас есть?',
+    icon: 'ph:compass',
+    content: 'Настольные игры, рисование, пианино, каникулярные программы, театральные игры и многое другое. Полный список — на странице «Кружки».'
+  },
+  {
+    label: 'Где вы находитесь и как добраться?',
+    icon: 'ph:map-pin',
+    content: 'Наш центр расположен по адресу, который указан на странице «О нас». Мы находимся в шаговой доступности от остановок общественного транспорта. Есть парковка для автомобилей.'
+  }
+]
 
 // club_1.jpg - настольные игры, club_2.jpg - рисование, club_3.jpg - пианино, club_4.jpg - каникулы
 
@@ -84,39 +119,57 @@ const CENTER_STATS: {
   }
 ]
 
-type ContactTimeOption = {
-  label: string
-  time: string
-  value: string
-}
+// event-1.jpeg - театральные игры, event-2.jpg - игры для самых маленьких, event-3.jpg - игровой клуб, event-4.jpg - космическая лекция
 
-const contactTimeOptions: ContactTimeOption[] = [
+const events: {
+  id: string
+  label: string
+  description: string
+  img: string
+  date: string
+  time: string
+  price: string | null
+}[] = [
   {
-    label: 'Утром (09:00 – 12:00)',
-    time: '09:00-12:00',
-    value: 'morning'
+    id: 'event-1',
+    label: 'Театральные игры',
+    description: 'Интерактивные занятия с элементами актёрского мастерства для детей 6–10 лет.',
+    img: 'event-1.jpeg',
+    date: '2026-04-12',
+    time: '11:00',
+    price: '500р'
   },
   {
-    label: 'Днем (12:00 – 18:00)',
-    time: '12:00-18:00',
-    value: 'afternoon'
+    id: 'event-2',
+    label: 'Игры для самых маленьких',
+    description: 'Развивающие и сенсорные игры для детей 2–4 лет с педагогом.',
+    img: 'event-2.jpg',
+    date: '2026-04-15',
+    time: '10:00',
+    price: '300р'
   },
   {
-    label: 'Вечером (18:00 – 21:00)',
-    time: '18:00-21:00',
-    value: 'evening'
+    id: 'event-3',
+    label: 'Игровой клуб',
+    description: 'Свободная игровая зона и настольные игры для семейных посещений.',
+    img: 'event-3.jpg',
+    date: '2026-04-18',
+    time: '17:00',
+    price: null
+  },
+  {
+    id: 'event-4',
+    label: 'Космическая лекция',
+    description: 'Путешествие по Солнечной системе с демонстрациями и мастер-классом.',
+    img: 'event-4.jpg',
+    date: '2026-04-20',
+    time: '18:30',
+    price: '700р'
   }
 ]
 
-const contactTimePhone = ref<string>('')
-const contactTimeSelected = ref<ContactTimeOption>(contactTimeOptions[0]!)
-
-const contactTimesPopoverOpen = ref<boolean>()
-
-const handleSelectContactTimeOption = (option: ContactTimeOption) => {
-  contactTimeSelected.value = option as ContactTimeOption
-  contactTimesPopoverOpen.value = false
-}
+const showAllEvents = ref(false)
+const visibleEvents = computed(() => showAllEvents.value ? events : events.slice(0, 3))
 </script>
 
 <template>
@@ -130,8 +183,7 @@ const handleSelectContactTimeOption = (option: ContactTimeOption) => {
         <div class="flex flex-col justify-center gap-4 sm:gap-8 px-2 sm:px-4">
           <!-- Main heading -->
           <h1
-            class="flex flex-col font-extrabold leading-[0.88] text-secondary
-                   text-5xl min-[480px]:text-6xl lg:text-7xl xl:text-8xl"
+            class="flex flex-col font-extrabold leading-[0.88] text-secondary text-5xl min-[480px]:text-6xl lg:text-7xl xl:text-8xl"
           >
             <span>
               <span class="text-primary">У</span>лица
@@ -192,67 +244,7 @@ const handleSelectContactTimeOption = (option: ContactTimeOption) => {
           <div class="flex flex-col gap-1">
             <span class="text-default/75 ml-4 text-lg font-bold">Или закажите звонок!</span>
 
-            <div class="flex bg-white *:text-lg *:py-2 *:px-4 overflow-hidden rounded-full">
-              <UInput
-                v-model="contactTimePhone"
-                v-maska="'+7 (###) ###-##-##'"
-                :placeholder="'+7 (###) ###-##-##'"
-                :variant="'none'"
-                size="xl"
-
-                color="primary"
-                class="flex-2/4"
-                type="tel"
-                autocomplete="tel"
-                inputmode="decimal"
-
-                leading-icon="lucide:phone"
-
-                :ui="{
-                  base: 'text-lg font-semibold placeholder:text-default/50',
-                  leadingIcon: 'ml-2 text-primary'
-                }"
-              />
-
-              <UPopover
-                :open="
-                  contactTimesPopoverOpen"
-                :ui="{
-                  content: 'bg-white shadow-none'
-                }"
-                @update:open="contactTimesPopoverOpen = $event"
-              >
-                <UButton
-                  :label="contactTimeSelected.time"
-                  size="xl"
-                  variant="ghost"
-                  class="rounded-none"
-                  color="secondary"
-                  :trailing-icon="'ph:caret-down-bold'"
-                />
-                <template #content>
-                  <div class="flex flex-col gap-2 p-2">
-                    <UButton
-                      v-for="option in contactTimeOptions"
-                      :key="option.value"
-                      :label="option.label"
-                      size="xl"
-                      variant="ghost"
-                      class="font-semibold"
-                      @click="() => handleSelectContactTimeOption(option)"
-                    />
-                  </div>
-                </template>
-              </UPopover>
-
-              <UButton
-                class="rounded-none font-semibold"
-                variant="soft"
-                size="xl"
-                color="primary"
-                label="Жду звонка"
-              />
-            </div>
+            <HomeCallbackForm bg="white" />
           </div>
         </div>
 
@@ -261,7 +253,7 @@ const handleSelectContactTimeOption = (option: ContactTimeOption) => {
           <div class="relative aspect-square rounded-md p-4 flex items-center justify-center">
             <picture
               id="hero_main_bg"
-              class="rounded-full p-4 z-10 bg-linear-to-bl from-amber-100/75 to-default relative size-full overflow-hidden aspect-square"
+              class="rounded-full p-4 z-10 bg-linear-to-b from-amber-100 via-sky-50 to-default relative size-full overflow-hidden aspect-square"
             >
               <img
                 class="scale-120 w-full h-full z-10 relative translate-y-8 object-bottom object-contain"
@@ -301,8 +293,8 @@ const handleSelectContactTimeOption = (option: ContactTimeOption) => {
     <!-- Short About Us Section -->
     <section class="bg-white flex overflow-hidden w-full relative py-20 z-10">
       <UIcon
-        name="ph:puzzle-piece-duotone"
-        class="absolute rotate-45 -bottom-72 -left-72 z-0 opacity-10 size-240 text-primary"
+        name="ph:flower-tulip-duotone"
+        class="absolute top-8 left-0 -translate-x-1/2 z-0 opacity-25 size-120 text-primary"
       />
 
       <UContainer class="relative z-10 grid grid-cols-1 md:grid-cols-2 items-center gap-12 md:gap-16">
@@ -329,6 +321,21 @@ const handleSelectContactTimeOption = (option: ContactTimeOption) => {
             внимательные педагоги и интересные занятия помогают каждому ребёнку найти
             своё призвание и поверить в себя.
           </p>
+
+          <div class="flex flex-col gap-1">
+            <span class="text-default/80 font-semibold ml-4">Мы на карте:</span>
+
+            <UButton
+              size="xl"
+              variant="ghost"
+              to="https://yandex.ru/maps/-/CPRON8mX"
+              target="_blank"
+              :trailing-icon="'ph:map-pin-area-duotone'"
+              class="w-fit"
+            >
+              г. Новосибирск, ул Ильича, 23-4
+            </UButton>
+          </div>
 
           <UButton
             to="/about"
@@ -359,8 +366,8 @@ const handleSelectContactTimeOption = (option: ContactTimeOption) => {
     <!-- Popular Clubs Section -->
     <section class="bg-default flex w-full relative overflow-hidden py-20 z-10">
       <UIcon
-        name="ph:cookie-duotone"
-        class="absolute rotate-15 -bottom-72 -left-72 z-0 opacity-10 size-240 text-primary"
+        name="ph:puzzle-piece-duotone"
+        class="absolute top-8 left-0 -translate-x-1/2 z-0 opacity-15 size-120 text-secondary"
       />
 
       <UContainer class="relative z-10 grid grid-cols-1 md:grid-cols-2 items-center gap-12 md:gap-16">
@@ -438,6 +445,186 @@ const handleSelectContactTimeOption = (option: ContactTimeOption) => {
             />
           </UCarousel>
         </div>
+      </UContainer>
+    </section>
+
+    <!-- Near Events Section -->
+    <section
+      id="events"
+      class="bg-white flex w-full relative overflow-hidden py-20 z-10"
+    >
+      <UIcon
+        name="ph:balloon-duotone"
+        class="absolute top-8 left-0 -translate-x-1/2 z-0 opacity-15 size-120 text-primary"
+      />
+
+      <UContainer class="relative z-10 flex flex-col gap-12">
+        <!-- Section header -->
+        <div class="flex flex-col gap-4">
+          <span class="w-fit flex items-center font-semibold">
+            <UIcon
+              name="ph:dot-duotone"
+              class="size-5 mr-1 mb-0.5 text-primary animate-pulse"
+            />
+            <span class="text-default">Ближайшие мероприятия</span>
+          </span>
+
+          <h2 class="font-extrabold leading-[0.9] text-secondary text-4xl lg:text-5xl xl:text-6xl">
+            События<br>
+            <span class="text-primary">в нашем центре</span>
+          </h2>
+
+          <p class="text-default/65 font-semibold text-lg leading-relaxed max-w-md">
+            Интересные встречи, мастер-классы и праздники — следите за расписанием
+            и приходите с детьми.
+          </p>
+        </div>
+
+        <!-- Events grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-2 gap-y-12 lg:gap-x-4">
+          <HomeEventCard
+            v-for="event in visibleEvents"
+            :key="event.id"
+            v-bind="event"
+          />
+        </div>
+
+        <!-- Toggle button -->
+        <div
+          v-if="events.length > 3"
+          class="flex justify-center pt-2"
+        >
+          <UButton
+            size="xl"
+            variant="ghost"
+            color="secondary"
+            class="px-8 group"
+            @click="showAllEvents = !showAllEvents"
+          >
+            <span class="text-lg font-bold">
+              {{ showAllEvents ? 'Скрыть' : 'Все события' }}
+            </span>
+            <UIcon
+              name="ph:caret-down-bold"
+              class="size-5 transition-transform duration-300"
+              :class="showAllEvents ? 'rotate-180' : ''"
+            />
+          </UButton>
+        </div>
+      </UContainer>
+    </section>
+
+    <!-- Mini Gallery Section -->
+    <section
+      id="gallery"
+      class="bg-default flex w-full relative overflow-hidden py-20 z-10"
+    >
+      <UIcon
+        name="ph:camera-duotone"
+        class="absolute top-8 left-0 -translate-x-1/2 z-0 opacity-15 size-120 text-secondary"
+      />
+
+      <UContainer class="relative z-10 flex flex-col gap-12">
+        <!-- Section header -->
+        <div class="flex flex-col gap-4">
+          <span class="w-fit flex items-center font-semibold">
+            <UIcon
+              name="ph:dot-duotone"
+              class="size-5 mr-1 mb-0.5 text-primary animate-pulse"
+            />
+            <span class="text-default">Наши моменты</span>
+          </span>
+
+          <h2 class="font-extrabold leading-[0.9] text-secondary text-4xl lg:text-5xl xl:text-6xl">
+            Фото<br>
+            <span class="text-primary">из центра</span>
+          </h2>
+
+          <p class="text-default/65 font-semibold text-lg leading-relaxed max-w-md">
+            Загляните в нашу жизнь — яркие занятия, счастливые лица
+            и уютная атмосфера «Улицы Радости».
+          </p>
+        </div>
+
+        <!-- Gallery grid -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div
+            v-for="(photo, i) in galleryImages"
+            :key="photo.src"
+            class="overflow-hidden rounded-lg group"
+            :class="{ 'col-span-2 row-span-2': i === 0,
+                      'col-span-2': i === galleryImages.length - 1 }"
+          >
+            <NuxtImg
+              :src="photo.src"
+              :alt="photo.alt"
+              class="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+              :class="i === 0 ? 'aspect-square' : 'aspect-4/3'"
+            />
+          </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="flex justify-center">
+          <UButton
+            to="/gallery"
+            size="xl"
+            class="px-8 py-2.5 group"
+          >
+            <span class="text-lg font-bold">Вся галерея</span>
+            <UIcon
+              name="ph:arrow-right-bold"
+              class="size-5 transition group-hover:translate-x-1"
+            />
+          </UButton>
+        </div>
+      </UContainer>
+    </section>
+
+    <!-- FAQ Section -->
+    <section
+      id="faq"
+      class="bg-white flex w-full relative overflow-hidden py-20 z-10"
+    >
+      <UIcon
+        name="ph:lightbulb-filament-duotone"
+        class="absolute top-8 left-0 -translate-x-1/2 z-0 opacity-15 size-80 text-primary"
+      />
+
+      <UContainer class="relative z-10 grid grid-cols-1 md:grid-cols-2 items-start gap-12 md:gap-16">
+        <!-- Left: text content -->
+        <div class="flex flex-col gap-6">
+          <span class="w-fit flex items-center font-semibold">
+            <UIcon
+              name="ph:dot-duotone"
+              class="size-5 mr-1 mb-0.5 text-primary animate-pulse"
+            />
+            <span class="text-default">Частые вопросы</span>
+          </span>
+
+          <h2 class="font-extrabold leading-[0.9] text-secondary text-4xl lg:text-5xl xl:text-6xl">
+            Вопросы<br>
+            <span class="text-primary">и ответы</span>
+          </h2>
+
+          <p class="text-default/65 font-semibold text-lg leading-relaxed max-w-md">
+            Собрали самые популярные вопросы от родителей.
+            Не нашли ответ? Свяжитесь с нами — мы всегда на связи!
+          </p>
+
+          <HomeCallbackForm bg="default" />
+        </div>
+
+        <!-- Right: accordion -->
+        <UAccordion
+          :items="faqItems"
+          :ui="{
+            root: 'space-y-4',
+            item: 'border-0 bg-default rounded-md',
+            trigger: 'py-4 px-4 text-lg font-bold text-secondary hover:text-primary transition-colors rounded-t-md cursor-pointer',
+            body: 'text-default/80 font-medium text-base leading-relaxed px-6 pb-6 pt-4 border-t-2 border-white'
+          }"
+        />
       </UContainer>
     </section>
   </div>

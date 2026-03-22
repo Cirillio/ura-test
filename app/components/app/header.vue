@@ -26,6 +26,10 @@ const MAIN_ROUTES: NavigationMenuItem[] = [
     to: '/clubs'
   },
   {
+    label: 'События',
+    to: '/#events'
+  },
+  {
     label: 'О нас',
     to: '/about'
   },
@@ -84,7 +88,6 @@ const MAIN_ROUTES: NavigationMenuItem[] = [
             :to="r.to"
 
             :variant="'ghost'"
-            :active-variant="'soft'"
 
             class="text-base min-h-full flex-1 px-5 font-semibold"
           />
@@ -101,15 +104,48 @@ const MAIN_ROUTES: NavigationMenuItem[] = [
           }"
         />
 
-        <UButton
-          label="Оформить абонемент"
-          color="secondary"
-          trailing-icon="ph:pencil-duotone"
-          class="text-base h-full font-semibold py-2 px-4"
-          :ui="{
-            trailingIcon: 'size-5'
+        <UTooltip
+          :content="{
+            align: 'end'
           }"
-        />
+          :delay-duration="75"
+          :ui="{
+            content: 'shadow-none ring-0 bg-secondary text-white p-4'
+          }"
+        >
+          <UButton
+            color="secondary"
+            icon="ph:pencil-duotone"
+            class="text-base h-full font-semibold p-2"
+            :ui="{
+              trailingIcon: 'size-5'
+            }"
+          />
+          <template #content>
+            <span class="text-base font-bold">Оформить абонемент</span>
+          </template>
+        </UTooltip>
+        <UTooltip
+          :content="{
+            align: 'end'
+          }"
+          :delay-duration="75"
+          :ui="{
+            content: 'shadow-none ring-0 bg-primary text-white p-4'
+          }"
+        >
+          <UButton
+            variant="ghost"
+            icon="ph:ticket"
+            class="text-base h-full font-semibold p-2"
+            :ui="{
+              trailingIcon: 'size-5'
+            }"
+          />
+          <template #content>
+            <span class="text-base font-bold">Мой абонемент</span>
+          </template>
+        </UTooltip>
       </div>
     </UContainer>
   </header>
